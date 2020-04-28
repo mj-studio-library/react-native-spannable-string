@@ -1,0 +1,66 @@
+{
+  "name": "react-native-spannable-string",
+  "version": "0.0.2",
+  "description": "The simple Text builder for multiple styling in single Text component",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mym0404/react-native-spannable-string"
+  },
+  "keywords": [],
+  "author": "MJ Studio <mym0404@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mym0404/react-native-spannable-string/issues"
+  },
+  "homepage": "https://github.com/mym0404/react-native-spannable-string",
+  "scripts": {
+    "prepare": "yarn run check",
+    "check": "yarn lint && yarn tsc",
+    "lint": "eslint src --ext .ts,.tsx,.js,.jsx",
+    "test": "jest"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": ">=0.50"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.7",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-decorators": "7.8.3",
+    "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
+    "@babel/plugin-transform-runtime": "7.8.3",
+    "@babel/preset-typescript": "^7.8.3",
+    "@babel/runtime": "^7.8.7",
+    "@dooboo/eslint-config": "^0.3.8",
+    "@types/react": "^16.9.23",
+    "@types/react-native": "^0.61.21",
+    "babel-preset-react-native": "^5.0.2",
+    "eslint": "^6.8.0",
+    "eslint-plugin-react-hooks": "^2.5.0",
+    "import-sort-style-eslint": "^6.0.0",
+    "jetifier": "^1.6.5",
+    "metro-react-native-babel-preset": "^0.58.0",
+    "prettier": "^1.19.1",
+    "prettier-plugin-import-sort": "^0.0.3",
+    "typescript": "3.8.3"
+  },
+  "importSort": {
+    ".js, .jsx": {
+      "style": "eslint",
+      "options": {}
+    },
+    ".ts, .tsx": {
+      "parser": "typescript",
+      "style": "eslint",
+      "options": {}
+    }
+  }
+}
