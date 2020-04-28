@@ -97,13 +97,23 @@ export default class SpannableBuilder {
             case 'B':
               return <BaseText key={order + index} style={{ fontWeight: 'bold' }}>{this.#textList[idx++]}</BaseText>;
             case 'I':
-              return <BaseText style={{ fontStyle: 'italic' }}>{this.#textList[idx++]}</BaseText>;
+              return <BaseText key={order + index} style={{ fontStyle: 'italic' }}>{this.#textList[idx++]}</BaseText>;
             case 'C':
-              return <BaseText style={{ color: this.#colorList[colorIdx++] }}>{this.#textList[idx++]}</BaseText>;
+              return (
+                <BaseText
+                  key={order + index}
+                  style={{ color: this.#colorList[colorIdx++] }}>
+                  {this.#textList[idx++]}
+                </BaseText>);
             case 'S':
-              return <BaseText style={this.#customStyleList[customStyleIdx++]}>{this.#textList[idx++]}</BaseText>;
+              return (
+                <BaseText
+                  key={order + index}
+                  style={this.#customStyleList[customStyleIdx++]}>
+                  {this.#textList[idx++]}
+                </BaseText>);
             default:
-              return <BaseText>{this.#textList[idx++]}</BaseText>;
+              return <BaseText key={order + index}>{this.#textList[idx++]}</BaseText>;
           }
         })}
       </BaseText>
