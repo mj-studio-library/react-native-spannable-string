@@ -35,13 +35,13 @@ SpannableBuilder.getInstance({ fontSize: 24 })
 ## Install 💠 
 
 ```
-npm i react-native-spannable-string
+npm i @mj-studio/react-native-spannable-string
 ```
 
 or
 
 ```
-yarn add react-native-spannable-string
+yarn add @mj-studio/react-native-spannable-string
 ```
 
 ## Usage 📌 
@@ -49,7 +49,7 @@ yarn add react-native-spannable-string
 0. Import class from package
 
 ```tsx
-import SpannableBuilder from 'react-native-spannable-string';
+import SpannableBuilder from '@mj-studio/react-native-spannable-string';
 ```
 
 1. Create `SpannableBuilder` instance
