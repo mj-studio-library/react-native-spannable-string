@@ -1,5 +1,5 @@
 {
-  "name": "react-native-spannable-string",
+  "name": "@mj-studio/react-native-spannable-string",
   "version": "1.0.0",
   "description": "The simple Text builder for multiple styling in single Text component",
   "main": "dist/index.js",
