@@ -46,6 +46,12 @@ yarn add react-native-spannable-string
 
 ## Usage 📌 
 
+0. Import class from package
+
+```tsx
+import SpannableBuilder from 'react-native-spannable-string';
+```
+
 1. Create `SpannableBuilder` instance
 
 Instantiate `SpannableBuiler` instance with static `getInstance` function.
