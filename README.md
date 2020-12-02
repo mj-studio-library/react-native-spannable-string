@@ -142,5 +142,7 @@ SpannableBuilder.getInstanceWithComponent(MyText)
   - First Release 🔥
 * 1.0.1
   - Add `baseStyle` parameter in `getInstanceWithComponent`
+* 1.0.4
+  - Add config options `additionalTextStyle`, `outerTextStyle`
 
 ### feel free your fork or any PR! Thanks
