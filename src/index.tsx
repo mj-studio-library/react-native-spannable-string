@@ -16,7 +16,7 @@ export default class SpannableBuilder {
       return <BaseText style={[style, config?.additionalStyle]} {...props}>{children}</BaseText>;
     };
 
-    return new SpannableBuilder(Wrapped);
+    return new SpannableBuilder(Wrapped, config?.outerTextStyle);
   }
 
   static getInstance(additionalStyle?: TextStyle, outerTextStyle?: TextStyle): SpannableBuilder {
