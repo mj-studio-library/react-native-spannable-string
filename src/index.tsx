@@ -4,21 +4,25 @@ import { Text, TextProps, TextStyle } from 'react-native';
 type TextComponent = ComponentType<TextProps & any>;
 
 export default class SpannableBuilder {
-  static getInstanceWithComponent(baseComponent?: TextComponent, baseStyle?: TextStyle): SpannableBuilder {
+  static getInstanceWithComponent(
+    baseComponent?: TextComponent,
+    config?: { additionalStyle?: TextStyle; outerTextStyle?: TextStyle },
+  ): SpannableBuilder {
     const BaseText = baseComponent || Text;
 
     const Wrapped = (props): ReactElement => {
       const { style, children } = props;
-      return <BaseText style={[style, baseStyle]} {...props}>{children}</BaseText>;
+
+      return <BaseText style={[style, config?.additionalStyle]} {...props}>{children}</BaseText>;
     };
 
     return new SpannableBuilder(Wrapped);
   }
 
-  static getInstance(baseStyle?: TextStyle): SpannableBuilder {
-    if (!baseStyle) return new SpannableBuilder(Text);
+  static getInstance(additionalStyle?: TextStyle, outerTextStyle?: TextStyle): SpannableBuilder {
+    if (!additionalStyle) return new SpannableBuilder(Text);
 
-    return SpannableBuilder.getInstanceWithComponent(Text, baseStyle);
+    return SpannableBuilder.getInstanceWithComponent(Text, { additionalStyle, outerTextStyle });
   }
 
   static append(text: string): SpannableBuilder {
@@ -48,25 +52,31 @@ export default class SpannableBuilder {
   readonly #colorList: string[] = [];
   readonly #customStyleList: TextStyle[] = [];
 
-  constructor(textComponent: TextComponent) {
+  readonly outerTextStyle?: TextStyle;
+
+  constructor(textComponent: TextComponent, outerTextStyle?: TextStyle) {
     this.#TextComponent = textComponent;
+    this.outerTextStyle = outerTextStyle;
   }
 
   append(text: string): this {
     this.#textList.push(text);
     this.#order += 'T';
+
     return this;
   }
 
   appendBold(text: string): this {
     this.#textList.push(text);
     this.#order += 'B';
+
     return this;
   }
 
   appendItalic(text: string): this {
     this.#textList.push(text);
     this.#order += 'I';
+
     return this;
   }
 
@@ -74,6 +84,7 @@ export default class SpannableBuilder {
     this.#textList.push(text);
     this.#order += 'C';
     this.#colorList.push(color);
+
     return this;
   }
 
@@ -81,6 +92,7 @@ export default class SpannableBuilder {
     this.#textList.push(text);
     this.#order += 'S';
     this.#customStyleList.push(style);
+
     return this;
   }
 
@@ -92,7 +104,7 @@ export default class SpannableBuilder {
     let customStyleIdx = 0;
 
     return (
-      <BaseText>
+      <BaseText style={this.outerTextStyle}>
         {[...this.#order].map((order, index) => {
           switch (order) {
             case 'B':
