@@ -1,5 +1,5 @@
 import React, { ComponentType, ReactElement } from 'react';
-import { Text, TextProps, TextStyle } from 'react-native';
+import { StyleSheet, Text, TextProps, TextStyle } from 'react-native';
 
 type TextComponent = ComponentType<TextProps & any>;
 
@@ -13,7 +13,7 @@ export default class SpannableBuilder {
     const Wrapped = (props): ReactElement => {
       const { style, children } = props;
 
-      return <BaseText style={[style, config?.additionalStyle]} {...props}>{children}</BaseText>;
+      return <BaseText style={StyleSheet.flatten([style, config?.additionalStyle])} {...props}>{children}</BaseText>;
     };
 
     return new SpannableBuilder(Wrapped, config?.outerTextStyle);
