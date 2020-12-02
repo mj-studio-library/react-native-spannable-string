@@ -140,5 +140,7 @@ SpannableBuilder.getInstanceWithComponent(MyText)
 ## Change Logs 🔧  
 * 1.0.0
   - First Release 🔥
+* 1.0.1
+  - Add `baseStyle` parameter in `getInstanceWithComponent`
 
 ### feel free your fork or any PR! Thanks
