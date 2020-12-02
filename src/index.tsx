@@ -4,20 +4,21 @@ import { Text, TextProps, TextStyle } from 'react-native';
 type TextComponent = ComponentType<TextProps & any>;
 
 export default class SpannableBuilder {
-  static getInstanceWithComponent(baseComponent?: TextComponent): SpannableBuilder {
-    return new SpannableBuilder(baseComponent || Text);
+  static getInstanceWithComponent(baseComponent?: TextComponent, baseStyle?: TextStyle): SpannableBuilder {
+    const BaseText = baseComponent || Text;
+
+    const Wrapped = (props): ReactElement => {
+      const { style, children } = props;
+      return <BaseText style={[style, baseStyle]} {...props}>{children}</BaseText>;
+    };
+
+    return new SpannableBuilder(Wrapped);
   }
 
   static getInstance(baseStyle?: TextStyle): SpannableBuilder {
     if (!baseStyle) return new SpannableBuilder(Text);
 
-    const Wrapped = (props): ReactElement => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { style, children } = props;
-      return <Text style={baseStyle} {...props}>{children}</Text>;
-    };
-
-    return SpannableBuilder.getInstanceWithComponent(Wrapped);
+    return SpannableBuilder.getInstanceWithComponent(Text, baseStyle);
   }
 
   static append(text: string): SpannableBuilder {
