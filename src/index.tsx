@@ -13,7 +13,9 @@ export default class SpannableBuilder {
     const Wrapped = (props): ReactElement => {
       const { style, children } = props;
 
-      return <BaseText style={StyleSheet.flatten([style, config?.additionalStyle])} {...props}>{children}</BaseText>;
+      const flattenStyle = StyleSheet.flatten([config?.additionalStyle, style]);
+
+      return <BaseText style={flattenStyle} {...props}>{children}</BaseText>;
     };
 
     return new SpannableBuilder(Wrapped, config?.outerTextStyle);
