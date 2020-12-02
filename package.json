@@ -1,6 +1,6 @@
 {
   "name": "@mj-studio/react-native-spannable-string",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The simple Text builder for multiple styling in single Text component",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/mym0404/react-native-spannable-string",
   "scripts": {
-    "prepare": "yarn run check",
+    "prepare": "yarn c",
     "c": "yarn lint && yarn tsc",
     "lint": "eslint src --ext .ts,.tsx,.js,.jsx",
     "test": "jest"
