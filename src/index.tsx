@@ -1,12 +1,12 @@
 import React, { ComponentType, ReactElement } from 'react';
-import { StyleSheet, Text, TextProps, TextStyle } from 'react-native';
+import { StyleProp, StyleSheet, Text, TextProps, TextStyle } from 'react-native';
 
 type TextComponent = ComponentType<TextProps & any>;
 
 export default class SpannableBuilder {
   static getInstanceWithComponent(
     baseComponent?: TextComponent,
-    config?: { additionalStyle?: TextStyle; outerTextStyle?: TextStyle },
+    config?: { additionalStyle?: StyleProp<TextStyle>; outerTextStyle?: StyleProp<TextStyle> },
   ): SpannableBuilder {
     const BaseText = baseComponent || Text;
 
@@ -15,13 +15,17 @@ export default class SpannableBuilder {
 
       const flattenStyle = StyleSheet.flatten([config?.additionalStyle, style]);
 
-      return <BaseText style={flattenStyle} {...props}>{children}</BaseText>;
+      return (
+        <BaseText style={flattenStyle} {...props}>
+          {children}
+        </BaseText>
+      );
     };
 
     return new SpannableBuilder(Wrapped, config?.outerTextStyle);
   }
 
-  static getInstance(additionalStyle?: TextStyle, outerTextStyle?: TextStyle): SpannableBuilder {
+  static getInstance(additionalStyle?: StyleProp<TextStyle>, outerTextStyle?: StyleProp<TextStyle>): SpannableBuilder {
     if (!additionalStyle) return new SpannableBuilder(Text);
 
     return SpannableBuilder.getInstanceWithComponent(Text, { additionalStyle, outerTextStyle });
@@ -52,11 +56,11 @@ export default class SpannableBuilder {
   #order = '';
   readonly #textList: string[] = [];
   readonly #colorList: string[] = [];
-  readonly #customStyleList: TextStyle[] = [];
+  readonly #customStyleList: StyleProp<TextStyle>[] = [];
 
-  readonly outerTextStyle?: TextStyle;
+  readonly outerTextStyle?: StyleProp<TextStyle>;
 
-  constructor(textComponent: TextComponent, outerTextStyle?: TextStyle) {
+  constructor(textComponent: TextComponent, outerTextStyle?: StyleProp<TextStyle>) {
     this.#TextComponent = textComponent;
     this.outerTextStyle = outerTextStyle;
   }
@@ -90,7 +94,7 @@ export default class SpannableBuilder {
     return this;
   }
 
-  appendCustom(text: string, style: TextStyle): this {
+  appendCustom(text: string, style: StyleProp<TextStyle>): this {
     this.#textList.push(text);
     this.#order += 'S';
     this.#customStyleList.push(style);
@@ -110,23 +114,29 @@ export default class SpannableBuilder {
         {[...this.#order].map((order, index) => {
           switch (order) {
             case 'B':
-              return <BaseText key={order + index} style={{ fontWeight: 'bold' }}>{this.#textList[idx++]}</BaseText>;
+              return (
+                <BaseText key={order + index} style={{ fontWeight: 'bold' }}>
+                  {this.#textList[idx++]}
+                </BaseText>
+              );
             case 'I':
-              return <BaseText key={order + index} style={{ fontStyle: 'italic' }}>{this.#textList[idx++]}</BaseText>;
+              return (
+                <BaseText key={order + index} style={{ fontStyle: 'italic' }}>
+                  {this.#textList[idx++]}
+                </BaseText>
+              );
             case 'C':
               return (
-                <BaseText
-                  key={order + index}
-                  style={{ color: this.#colorList[colorIdx++] }}>
+                <BaseText key={order + index} style={{ color: this.#colorList[colorIdx++] }}>
                   {this.#textList[idx++]}
-                </BaseText>);
+                </BaseText>
+              );
             case 'S':
               return (
-                <BaseText
-                  key={order + index}
-                  style={this.#customStyleList[customStyleIdx++]}>
+                <BaseText key={order + index} style={this.#customStyleList[customStyleIdx++]}>
                   {this.#textList[idx++]}
-                </BaseText>);
+                </BaseText>
+              );
             default:
               return <BaseText key={order + index}>{this.#textList[idx++]}</BaseText>;
           }
