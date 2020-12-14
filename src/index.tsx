@@ -55,7 +55,6 @@ export default class SpannableBuilder {
 
   #order = '';
   readonly #textList: string[] = [];
-  readonly #colorList: string[] = [];
   readonly #customStyleList: StyleProp<TextStyle>[] = [];
 
   readonly outerTextStyle?: StyleProp<TextStyle>;
@@ -72,28 +71,6 @@ export default class SpannableBuilder {
     return this;
   }
 
-  appendBold(text: string): this {
-    this.#textList.push(text);
-    this.#order += 'B';
-
-    return this;
-  }
-
-  appendItalic(text: string): this {
-    this.#textList.push(text);
-    this.#order += 'I';
-
-    return this;
-  }
-
-  appendColored(text: string, color: string): this {
-    this.#textList.push(text);
-    this.#order += 'C';
-    this.#colorList.push(color);
-
-    return this;
-  }
-
   appendCustom(text: string, style: StyleProp<TextStyle>): this {
     this.#textList.push(text);
     this.#order += 'S';
@@ -102,35 +79,34 @@ export default class SpannableBuilder {
     return this;
   }
 
+  appendBold(text: string): this {
+    this.appendCustom(text, { fontWeight: 'bold' });
+
+    return this;
+  }
+
+  appendItalic(text: string): this {
+    this.appendCustom(text, { fontStyle: 'italic' });
+
+    return this;
+  }
+
+  appendColored(text: string, color: string): this {
+    this.appendCustom(text, { color });
+
+    return this;
+  }
+
   build(): ReactElement {
     const BaseText: TextComponent = this.#TextComponent;
 
     let idx = 0;
-    let colorIdx = 0;
     let customStyleIdx = 0;
 
     return (
       <BaseText style={this.outerTextStyle}>
         {[...this.#order].map((order, index) => {
           switch (order) {
-            case 'B':
-              return (
-                <BaseText key={order + index} style={{ fontWeight: 'bold' }}>
-                  {this.#textList[idx++]}
-                </BaseText>
-              );
-            case 'I':
-              return (
-                <BaseText key={order + index} style={{ fontStyle: 'italic' }}>
-                  {this.#textList[idx++]}
-                </BaseText>
-              );
-            case 'C':
-              return (
-                <BaseText key={order + index} style={{ color: this.#colorList[colorIdx++] }}>
-                  {this.#textList[idx++]}
-                </BaseText>
-              );
             case 'S':
               return (
                 <BaseText key={order + index} style={this.#customStyleList[customStyleIdx++]}>
