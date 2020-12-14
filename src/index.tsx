@@ -11,9 +11,9 @@ export default class SpannableBuilder {
     const BaseText = baseComponent || Text;
 
     const Wrapped = (props): ReactElement => {
-      const { style, children } = props;
+      const { style, children, appendedStyle, outerStyle } = props;
 
-      const flattenStyle = StyleSheet.flatten([config?.additionalStyle, style]);
+      const flattenStyle = StyleSheet.flatten([config?.additionalStyle, style, outerStyle, appendedStyle]);
 
       return (
         <BaseText style={flattenStyle} {...props}>
@@ -29,26 +29,6 @@ export default class SpannableBuilder {
     if (!additionalStyle) return new SpannableBuilder(Text);
 
     return SpannableBuilder.getInstanceWithComponent(Text, { additionalStyle, outerTextStyle });
-  }
-
-  static append(text: string): SpannableBuilder {
-    return new SpannableBuilder(Text).append(text);
-  }
-
-  static appendBold(text: string): SpannableBuilder {
-    return new SpannableBuilder(Text).appendBold(text);
-  }
-
-  static appendItalic(text: string): SpannableBuilder {
-    return new SpannableBuilder(Text).appendItalic(text);
-  }
-
-  static appendColored(text: string, color: string): SpannableBuilder {
-    return new SpannableBuilder(Text).appendColored(text, color);
-  }
-
-  static appendCustom(text: string, style: TextStyle): SpannableBuilder {
-    return new SpannableBuilder(Text).appendCustom(text, style);
   }
 
   readonly #TextComponent: TextComponent;
@@ -104,12 +84,12 @@ export default class SpannableBuilder {
     let customStyleIdx = 0;
 
     return (
-      <BaseText style={this.outerTextStyle}>
+      <BaseText outerStyle={this.outerTextStyle}>
         {[...this.#order].map((order, index) => {
           switch (order) {
             case 'S':
               return (
-                <BaseText key={order + index} style={this.#customStyleList[customStyleIdx++]}>
+                <BaseText key={order + index} appendedStyle={this.#customStyleList[customStyleIdx++]}>
                   {this.#textList[idx++]}
                 </BaseText>
               );
