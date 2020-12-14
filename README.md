@@ -144,5 +144,7 @@ SpannableBuilder.getInstanceWithComponent(MyText)
   - Add `baseStyle` parameter in `getInstanceWithComponent`
 * 1.0.4
   - Add config options `additionalTextStyle`, `outerTextStyle`
+* 1.0.7
+  - Fix additionalTextStyle bugs in `appendBold`, `appendColored`, `appendItalic`
 
 ### feel free your fork or any PR! Thanks
