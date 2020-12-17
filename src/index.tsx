@@ -44,6 +44,12 @@ export default class SpannableBuilder {
     this.outerTextStyle = outerTextStyle;
   }
 
+  clear() {
+    this.#order = '';
+    this.#textList.splice(0, this.#textList.length);
+    this.#customStyleList.splice(0, this.#customStyleList.length);
+  }
+
   append(text: string): this {
     this.#textList.push(text);
     this.#order += 'T';
@@ -83,7 +89,7 @@ export default class SpannableBuilder {
     let idx = 0;
     let customStyleIdx = 0;
 
-    return (
+    const result = (
       <BaseText outerStyle={this.outerTextStyle}>
         {[...this.#order].map((order, index) => {
           switch (order) {
@@ -99,5 +105,9 @@ export default class SpannableBuilder {
         })}
       </BaseText>
     );
+
+    this.clear();
+
+    return result;
   }
 }
