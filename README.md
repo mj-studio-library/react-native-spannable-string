@@ -146,5 +146,7 @@ SpannableBuilder.getInstanceWithComponent(MyText)
   - Add config options `additionalTextStyle`, `outerTextStyle`
 * 1.0.7
   - Fix additionalTextStyle bugs in `appendBold`, `appendColored`, `appendItalic`
+* 1.0.8
+  - Enable re-usability of `Builder`
 
 ### feel free your fork or any PR! Thanks
