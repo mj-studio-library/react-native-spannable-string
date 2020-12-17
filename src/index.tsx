@@ -44,7 +44,7 @@ export default class SpannableBuilder {
     this.outerTextStyle = outerTextStyle;
   }
 
-  clear() {
+  clear(): void {
     this.#order = '';
     this.#textList.splice(0, this.#textList.length);
     this.#customStyleList.splice(0, this.#customStyleList.length);
