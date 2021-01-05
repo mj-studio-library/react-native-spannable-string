@@ -148,5 +148,7 @@ SpannableBuilder.getInstanceWithComponent(MyText)
   - Fix additionalTextStyle bugs in `appendBold`, `appendColored`, `appendItalic`
 * 1.0.8
   - Enable re-usability of `Builder`
+* 1.0.9
+  - Add `appendBoldWithDelimiter`
 
 ### feel free your fork or any PR! Thanks
