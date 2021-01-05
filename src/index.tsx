@@ -71,6 +71,18 @@ export default class SpannableBuilder {
     return this;
   }
 
+  appendBoldWithDelimiter(text: string, delimiter = '$'): this {
+    text.split(delimiter).forEach((t, i) => {
+      if (i % 2 === 0) {
+        this.append(t);
+      } else {
+        this.appendBold(t);
+      }
+    });
+
+    return this;
+  }
+
   appendItalic(text: string): this {
     this.appendCustom(text, { fontStyle: 'italic' });
 
