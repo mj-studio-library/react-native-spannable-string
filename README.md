@@ -150,5 +150,7 @@ SpannableBuilder.getInstanceWithComponent(MyText)
   - Enable re-usability of `Builder`
 * 1.0.9
   - Add `appendBoldWithDelimiter`
+* 1.1.1
+  - Ignore if first parameter of appendXXX is not a string
 
 ### feel free your fork or any PR! Thanks
