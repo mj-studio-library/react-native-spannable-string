@@ -51,6 +51,8 @@ export default class SpannableBuilder {
   }
 
   append(text: string): this {
+    if (typeof text !== 'string') return this;
+
     this.#textList.push(text);
     this.#order += 'T';
 
@@ -58,6 +60,8 @@ export default class SpannableBuilder {
   }
 
   appendCustom(text: string, style: StyleProp<TextStyle>): this {
+    if (typeof text !== 'string') return this;
+
     this.#textList.push(text);
     this.#order += 'S';
     this.#customStyleList.push(style);
@@ -66,12 +70,16 @@ export default class SpannableBuilder {
   }
 
   appendBold(text: string): this {
+    if (typeof text !== 'string') return this;
+
     this.appendCustom(text, { fontWeight: 'bold' });
 
     return this;
   }
 
   appendBoldWithDelimiter(text: string, delimiter = '$'): this {
+    if (typeof text !== 'string') return this;
+
     text.split(delimiter).forEach((t, i) => {
       if (i % 2 === 0) {
         this.append(t);
@@ -84,12 +92,16 @@ export default class SpannableBuilder {
   }
 
   appendItalic(text: string): this {
+    if (typeof text !== 'string') return this;
+
     this.appendCustom(text, { fontStyle: 'italic' });
 
     return this;
   }
 
   appendColored(text: string, color: string): this {
+    if (typeof text !== 'string') return this;
+
     this.appendCustom(text, { color });
 
     return this;
