@@ -77,20 +77,6 @@ export default class SpannableBuilder {
     return this;
   }
 
-  appendBoldWithDelimiter(text: string, delimiter = '$'): this {
-    if (typeof text !== 'string') return this;
-
-    text.split(delimiter).forEach((t, i) => {
-      if (i % 2 === 0) {
-        this.append(t);
-      } else {
-        this.appendBold(t);
-      }
-    });
-
-    return this;
-  }
-
   appendItalic(text: string): this {
     if (typeof text !== 'string') return this;
 
@@ -105,6 +91,58 @@ export default class SpannableBuilder {
     this.appendCustom(text, { color });
 
     return this;
+  }
+
+  private appendWithDelimiter({
+    appender,
+    delimiter,
+    text,
+  }: {
+    text: string;
+    delimiter: string;
+    appender: (text: string) => void;
+  }): this {
+    if (typeof text !== 'string') return this;
+
+    text.split(delimiter).forEach((t, i) => {
+      if (i % 2 === 0) {
+        this.append(t);
+      } else {
+        appender(t);
+      }
+    });
+
+    return this;
+  }
+
+  appendBoldWithDelimiter(text: string, delimiter = '$'): this {
+    return this.appendWithDelimiter({
+      text,
+      delimiter,
+      appender: (text) => {
+        this.appendBold(text);
+      },
+    });
+  }
+
+  appendItalicWithDelimiter(text: string, delimiter = '$'): this {
+    return this.appendWithDelimiter({
+      text,
+      delimiter,
+      appender: (text) => {
+        this.appendItalic(text);
+      },
+    });
+  }
+
+  appendColoredWithDelimiter(text: string, color: string, delimiter = '$'): this {
+    return this.appendWithDelimiter({
+      text,
+      delimiter,
+      appender: (text) => {
+        this.appendColored(text, color);
+      },
+    });
   }
 
   build(): ReactElement {
