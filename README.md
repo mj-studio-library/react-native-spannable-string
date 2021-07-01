@@ -152,5 +152,7 @@ SpannableBuilder.getInstanceWithComponent(MyText)
   - Add `appendBoldWithDelimiter`
 * 1.1.1
   - Ignore if first parameter of appendXXX is not a string
+* 1.1.3
+  - Add `appendCustomWithDelimiter`, `appendColoredWithDelimiter`, `appendItalicWithDelimiter`,
 
 ### feel free your fork or any PR! Thanks

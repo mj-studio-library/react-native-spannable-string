@@ -115,6 +115,16 @@ export default class SpannableBuilder {
     return this;
   }
 
+  appendCustomWithDelimiter(text: string, style: StyleProp<TextStyle>, delimiter = '$'): this {
+    return this.appendWithDelimiter({
+      text,
+      delimiter,
+      appender: (text) => {
+        this.appendCustom(text, style);
+      },
+    });
+  }
+
   appendBoldWithDelimiter(text: string, delimiter = '$'): this {
     return this.appendWithDelimiter({
       text,
