@@ -1,6 +1,8 @@
 # react-native-spannable-string
 ![npm](https://img.shields.io/npm/v/react-native-spannable-string)
 
+![ogimage-1260-630](https://github.com/mj-studio-library/react-native-spannable-string/assets/33388801/258b55f7-57d5-4a99-903c-c499727e0a53)
+
 ### The simple Text builder for multiple styling in single Text component
 
 How do you make this?
