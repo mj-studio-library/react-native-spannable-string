@@ -89,6 +89,14 @@ SpannableBuilder.getInstanceWithComponent(MyText)
     .append('Using ')
     .appendBold('Bold')
     .append(' in Text')
+    .appendCustomComponent(
+              <FastImage
+                source={{
+                  uri: 'https://talkimg.imbc.com/TVianUpload/tvian/TViews/image/2023/04/27/0e83f60f-51d4-49b2-919c-92ec2ff928c5.jpg',
+                }}
+                style={{ width: 30, height: 30, borderRadius: 30 }}
+              />,
+            )
     .build()}
   {SpannableBuilder.getInstance({ fontSize: 24 })
     .append('Using ')
@@ -154,5 +162,7 @@ SpannableBuilder.getInstanceWithComponent(MyText)
   - Ignore if first parameter of appendXXX is not a string
 * 1.1.3
   - Add `appendCustomWithDelimiter`, `appendColoredWithDelimiter`, `appendItalicWithDelimiter`,
+* 1.1.4
+  - Add `appendCustomComponent`
 
 ### feel free your fork or any PR! Thanks
