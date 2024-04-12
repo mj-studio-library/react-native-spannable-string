@@ -155,6 +155,14 @@ export default class SpannableBuilder {
     });
   }
 
+  appendCustomComponent(component: ReactElement): this {
+    this.#textList.push(component);
+    this.#order += 'C';
+    this.#customStyleList.push(null);
+
+    return this;
+  }
+
   build(): ReactElement {
     const BaseText: TextComponent = this.#TextComponent;
 
@@ -166,6 +174,7 @@ export default class SpannableBuilder {
         {[...this.#order].map((order, index) => {
           switch (order) {
             case 'S':
+            case 'C':
               return (
                 <BaseText key={order + index} appendedStyle={this.#customStyleList[customStyleIdx++]}>
                   {this.#textList[idx++]}
