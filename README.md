@@ -1,7 +1,5 @@
-# react-native-spannable-string
+# Simplist Spannable Text Builder support variant styling, child component
 ![NPM Version](https://img.shields.io/npm/v/%40mj-studio%2Freact-native-spannable-string)
-
-### The simple Text builder for multiple styling in single Text component
 
 How do you make this?
 
