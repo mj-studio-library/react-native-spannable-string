@@ -1,22 +1,35 @@
 import type { ComponentType, ReactElement } from 'react';
+import React from 'react';
 import type { StyleProp, TextProps, TextStyle } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native';
 
-import React from 'react';
-
-type TextComponent = ComponentType<TextProps & any>;
-
+type TextComponent = ComponentType<TextProps>;
+type Config = {
+  additionalStyle?: StyleProp<TextStyle>;
+  outerTextStyle?: StyleProp<TextStyle>;
+};
+type InnerConfig = {
+  appendedStyle?: StyleProp<TextStyle>;
+  outerStyle?: StyleProp<TextStyle>;
+};
 export default class SpannableBuilder {
   static getInstanceWithComponent(
     baseComponent?: TextComponent,
-    config?: { additionalStyle?: StyleProp<TextStyle>; outerTextStyle?: StyleProp<TextStyle> },
+    config?: Config
   ): SpannableBuilder {
-    const BaseText = baseComponent || Text;
+    const BaseText: TextComponent = baseComponent || Text;
 
-    const Wrapped = (props): ReactElement => {
+    const Wrapped: TextComponent = (
+      props: TextProps & InnerConfig
+    ): ReactElement => {
       const { style, children, appendedStyle, outerStyle } = props;
 
-      const flattenStyle = StyleSheet.flatten([config?.additionalStyle, style, outerStyle, appendedStyle]);
+      const flattenStyle = StyleSheet.flatten([
+        config?.additionalStyle,
+        style,
+        outerStyle,
+        appendedStyle,
+      ]);
 
       return (
         <BaseText style={flattenStyle} {...props}>
@@ -28,13 +41,19 @@ export default class SpannableBuilder {
     return new SpannableBuilder(Wrapped, config?.outerTextStyle);
   }
 
-  static getInstance(additionalStyle?: StyleProp<TextStyle>, outerTextStyle?: StyleProp<TextStyle>): SpannableBuilder {
+  static getInstance(
+    additionalStyle?: StyleProp<TextStyle>,
+    outerTextStyle?: StyleProp<TextStyle>
+  ): SpannableBuilder {
     if (!additionalStyle) return new SpannableBuilder(Text);
 
-    return SpannableBuilder.getInstanceWithComponent(Text, { additionalStyle, outerTextStyle });
+    return SpannableBuilder.getInstanceWithComponent(Text, {
+      additionalStyle,
+      outerTextStyle,
+    });
   }
 
-  readonly #TextComponent: TextComponent;
+  readonly #TextComponent: ComponentType<TextProps & InnerConfig>;
 
   #order = '';
   readonly #textList: (string | ReactElement)[] = [];
@@ -42,7 +61,10 @@ export default class SpannableBuilder {
 
   readonly outerTextStyle?: StyleProp<TextStyle>;
 
-  constructor(textComponent: TextComponent, outerTextStyle?: StyleProp<TextStyle>) {
+  constructor(
+    textComponent: TextComponent,
+    outerTextStyle?: StyleProp<TextStyle>
+  ) {
     this.#TextComponent = textComponent;
     this.outerTextStyle = outerTextStyle;
   }
@@ -125,7 +147,11 @@ export default class SpannableBuilder {
     return this;
   }
 
-  appendCustomWithDelimiter(text: string, style: StyleProp<TextStyle>, delimiter = '$'): this {
+  appendCustomWithDelimiter(
+    text: string,
+    style: StyleProp<TextStyle>,
+    delimiter = '$'
+  ): this {
     return this.appendWithDelimiter({
       text,
       delimiter,
@@ -155,7 +181,11 @@ export default class SpannableBuilder {
     });
   }
 
-  appendColoredWithDelimiter(text: string, color: string, delimiter = '$'): this {
+  appendColoredWithDelimiter(
+    text: string,
+    color: string,
+    delimiter = '$'
+  ): this {
     return this.appendWithDelimiter({
       text,
       delimiter,
@@ -166,7 +196,7 @@ export default class SpannableBuilder {
   }
 
   build(): ReactElement {
-    const BaseText: TextComponent = this.#TextComponent;
+    const BaseText = this.#TextComponent;
 
     let idx = 0;
     let customStyleIdx = 0;
@@ -179,7 +209,10 @@ export default class SpannableBuilder {
           switch (order) {
             case 'S':
               return (
-                <BaseText key={key} appendedStyle={this.#customStyleList[customStyleIdx++]}>
+                <BaseText
+                  key={key}
+                  appendedStyle={this.#customStyleList[customStyleIdx++]}
+                >
                   {this.#textList[idx++]}
                 </BaseText>
               );
