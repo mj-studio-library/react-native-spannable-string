@@ -1,5 +1,8 @@
-import React, { ComponentType, ReactElement } from 'react';
-import { StyleProp, StyleSheet, Text, TextProps, TextStyle } from 'react-native';
+import type { ComponentType, ReactElement } from 'react';
+import type { StyleProp, TextProps, TextStyle } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+
+import React from 'react';
 
 type TextComponent = ComponentType<TextProps & any>;
 
@@ -34,7 +37,7 @@ export default class SpannableBuilder {
   readonly #TextComponent: TextComponent;
 
   #order = '';
-  readonly #textList: string[] = [];
+  readonly #textList: (string | ReactElement)[] = [];
   readonly #customStyleList: StyleProp<TextStyle>[] = [];
 
   readonly outerTextStyle?: StyleProp<TextStyle>;
@@ -89,6 +92,13 @@ export default class SpannableBuilder {
     if (typeof text !== 'string') return this;
 
     this.appendCustom(text, { color });
+
+    return this;
+  }
+
+  appendCustomComponent(component: ReactElement): this {
+    this.#textList.push(component);
+    this.#order += 'C';
 
     return this;
   }
@@ -155,14 +165,6 @@ export default class SpannableBuilder {
     });
   }
 
-  appendCustomComponent(component: ReactElement): this {
-    this.#textList.push(component);
-    this.#order += 'C';
-    this.#customStyleList.push(null);
-
-    return this;
-  }
-
   build(): ReactElement {
     const BaseText: TextComponent = this.#TextComponent;
 
@@ -172,16 +174,19 @@ export default class SpannableBuilder {
     const result = (
       <BaseText outerStyle={this.outerTextStyle}>
         {[...this.#order].map((order, index) => {
+          const key = `${order}${index}`;
+
           switch (order) {
             case 'S':
-            case 'C':
               return (
-                <BaseText key={order + index} appendedStyle={this.#customStyleList[customStyleIdx++]}>
+                <BaseText key={key} appendedStyle={this.#customStyleList[customStyleIdx++]}>
                   {this.#textList[idx++]}
                 </BaseText>
               );
+            case 'C':
+              return <View key={key}>{this.#textList[idx++]}</View>;
             default:
-              return <BaseText key={order + index}>{this.#textList[idx++]}</BaseText>;
+              return <BaseText key={key}>{this.#textList[idx++]}</BaseText>;
           }
         })}
       </BaseText>
