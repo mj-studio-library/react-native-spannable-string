@@ -1,19 +1,35 @@
-import React, { ComponentType, ReactElement } from 'react';
-import { StyleProp, StyleSheet, Text, TextProps, TextStyle } from 'react-native';
+import type { ComponentType, ReactElement } from 'react';
+import React from 'react';
+import type { StyleProp, TextProps, TextStyle } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
-type TextComponent = ComponentType<TextProps & any>;
-
+type TextComponent = ComponentType<TextProps>;
+type Config = {
+  additionalStyle?: StyleProp<TextStyle>;
+  outerTextStyle?: StyleProp<TextStyle>;
+};
+type InnerConfig = {
+  appendedStyle?: StyleProp<TextStyle>;
+  outerStyle?: StyleProp<TextStyle>;
+};
 export default class SpannableBuilder {
   static getInstanceWithComponent(
     baseComponent?: TextComponent,
-    config?: { additionalStyle?: StyleProp<TextStyle>; outerTextStyle?: StyleProp<TextStyle> },
+    config?: Config
   ): SpannableBuilder {
-    const BaseText = baseComponent || Text;
+    const BaseText: TextComponent = baseComponent || Text;
 
-    const Wrapped = (props): ReactElement => {
+    const Wrapped: TextComponent = (
+      props: TextProps & InnerConfig
+    ): ReactElement => {
       const { style, children, appendedStyle, outerStyle } = props;
 
-      const flattenStyle = StyleSheet.flatten([config?.additionalStyle, style, outerStyle, appendedStyle]);
+      const flattenStyle = StyleSheet.flatten([
+        config?.additionalStyle,
+        style,
+        outerStyle,
+        appendedStyle,
+      ]);
 
       return (
         <BaseText style={flattenStyle} {...props}>
@@ -25,21 +41,30 @@ export default class SpannableBuilder {
     return new SpannableBuilder(Wrapped, config?.outerTextStyle);
   }
 
-  static getInstance(additionalStyle?: StyleProp<TextStyle>, outerTextStyle?: StyleProp<TextStyle>): SpannableBuilder {
+  static getInstance(
+    additionalStyle?: StyleProp<TextStyle>,
+    outerTextStyle?: StyleProp<TextStyle>
+  ): SpannableBuilder {
     if (!additionalStyle) return new SpannableBuilder(Text);
 
-    return SpannableBuilder.getInstanceWithComponent(Text, { additionalStyle, outerTextStyle });
+    return SpannableBuilder.getInstanceWithComponent(Text, {
+      additionalStyle,
+      outerTextStyle,
+    });
   }
 
-  readonly #TextComponent: TextComponent;
+  readonly #TextComponent: ComponentType<TextProps & InnerConfig>;
 
   #order = '';
-  readonly #textList: string[] = [];
+  readonly #textList: (string | ReactElement)[] = [];
   readonly #customStyleList: StyleProp<TextStyle>[] = [];
 
   readonly outerTextStyle?: StyleProp<TextStyle>;
 
-  constructor(textComponent: TextComponent, outerTextStyle?: StyleProp<TextStyle>) {
+  constructor(
+    textComponent: TextComponent,
+    outerTextStyle?: StyleProp<TextStyle>
+  ) {
     this.#TextComponent = textComponent;
     this.outerTextStyle = outerTextStyle;
   }
@@ -93,6 +118,13 @@ export default class SpannableBuilder {
     return this;
   }
 
+  appendCustomComponent(component: ReactElement): this {
+    this.#textList.push(component);
+    this.#order += 'C';
+
+    return this;
+  }
+
   private appendWithDelimiter({
     appender,
     delimiter,
@@ -115,7 +147,11 @@ export default class SpannableBuilder {
     return this;
   }
 
-  appendCustomWithDelimiter(text: string, style: StyleProp<TextStyle>, delimiter = '$'): this {
+  appendCustomWithDelimiter(
+    text: string,
+    style: StyleProp<TextStyle>,
+    delimiter = '$'
+  ): this {
     return this.appendWithDelimiter({
       text,
       delimiter,
@@ -145,7 +181,11 @@ export default class SpannableBuilder {
     });
   }
 
-  appendColoredWithDelimiter(text: string, color: string, delimiter = '$'): this {
+  appendColoredWithDelimiter(
+    text: string,
+    color: string,
+    delimiter = '$'
+  ): this {
     return this.appendWithDelimiter({
       text,
       delimiter,
@@ -156,7 +196,7 @@ export default class SpannableBuilder {
   }
 
   build(): ReactElement {
-    const BaseText: TextComponent = this.#TextComponent;
+    const BaseText = this.#TextComponent;
 
     let idx = 0;
     let customStyleIdx = 0;
@@ -164,15 +204,22 @@ export default class SpannableBuilder {
     const result = (
       <BaseText outerStyle={this.outerTextStyle}>
         {[...this.#order].map((order, index) => {
+          const key = `${order}${index}`;
+
           switch (order) {
             case 'S':
               return (
-                <BaseText key={order + index} appendedStyle={this.#customStyleList[customStyleIdx++]}>
+                <BaseText
+                  key={key}
+                  appendedStyle={this.#customStyleList[customStyleIdx++]}
+                >
                   {this.#textList[idx++]}
                 </BaseText>
               );
+            case 'C':
+              return <View key={key}>{this.#textList[idx++]}</View>;
             default:
-              return <BaseText key={order + index}>{this.#textList[idx++]}</BaseText>;
+              return <BaseText key={key}>{this.#textList[idx++]}</BaseText>;
           }
         })}
       </BaseText>

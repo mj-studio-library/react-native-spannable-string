@@ -3,4 +3,6 @@
 **/*.d.ts
 
 metro.config.js
-/dist
+dist/
+node_modules/
+lib/
