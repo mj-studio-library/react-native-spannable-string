@@ -1,5 +1,6 @@
 # react-native-spannable-string
-![npm](https://img.shields.io/npm/v/react-native-spannable-string)
+![NPM Version](https://img.shields.io/npm/v/%40mj-studio%2Freact-native-spannable-string)
+
 
 ![ogimage-1260-630](https://github.com/mj-studio-library/react-native-spannable-string/assets/33388801/258b55f7-57d5-4a99-903c-c499727e0a53)
 
